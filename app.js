@@ -1,8 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
-const userRouter = require('./router/user');
 const joi = require('@hapi/joi');
+const expressJWT = require('express-jwt');
+const userRouter = require('./router/user');
+const userinfoRouter = require('./router/userinfo');
+const config = require('./config');
+const app = express();
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
@@ -21,15 +24,15 @@ app.use((req, res, next) => {
 });
 
 // 一定要在路由之前配置解析 Token 的中间件
-const expressJWT = require('express-jwt');
-const config = require('./config');
 app.use(expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api/] }));
 
 // 用户路由模块
 app.use('/api', userRouter);
+app.use('/my', userinfoRouter);
 
 // 错误处理中间件
 app.use((err, req, res, next) => {
+    console.log(err);
     // 验证失败的错误
     if (err instanceof joi.ValidationError) return res.cc(err);
     // 身份认证失败的错误
