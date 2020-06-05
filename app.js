@@ -32,7 +32,6 @@ app.use('/my', userinfoRouter);
 
 // 错误处理中间件
 app.use((err, req, res, next) => {
-    console.log(err);
     // 验证失败的错误
     if (err instanceof joi.ValidationError) return res.cc(err);
     // 身份认证失败的错误
