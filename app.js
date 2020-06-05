@@ -5,11 +5,14 @@ const expressJWT = require('express-jwt');
 const userRouter = require('./router/user');
 const userinfoRouter = require('./router/userinfo');
 const artCateRouter = require('./router/artcate');
+const articleRouter = require('./router/article');
 const config = require('./config');
 const app = express();
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
+
+app.use('/uploads', express.static('uploads'));
 
 app.use((req, res, next) => {
     // status: 0 代表成功
@@ -32,6 +35,8 @@ app.use('/api', userRouter);
 app.use('/my', userinfoRouter);
 // 文章分类路由模块
 app.use('/my/article', artCateRouter);
+// 文章路由
+app.use('/my/article', articleRouter);
 
 // 错误处理中间件
 app.use((err, req, res, next) => {
