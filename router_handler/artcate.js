@@ -1,5 +1,6 @@
 const db = require('../db');
 
+// 获取文章分类
 exports.getArtCates = (req, res) => {
     const sql = 'SELECT * FROM ev_article_cate WHERE is_delete=0 ORDER BY id ASC';
     db.query(sql, (err, results) => {
@@ -12,6 +13,7 @@ exports.getArtCates = (req, res) => {
     });
 };
 
+// 新增文章分类
 exports.addArticleCates = (req, res) => {
     const sql = 'SELECT * FROM ev_article_cate WHERE name=? OR alias=?';
     db.query(sql, [req.body.name, req.body.alias], (err, results) => {
@@ -34,5 +36,16 @@ exports.addArticleCates = (req, res) => {
             // 新增文章分类成功
             res.cc('新增文章分类成功！', 0);
         });
+    });
+};
+
+
+// 根据 ID 删除文章分类
+exports.deleteCateById = (req, res) => {
+    const sql = 'UPDATE ev_article_cate SET is_delete=1 WHERE id=?';
+    db.query(sql, req.params.id, (err, results) => {
+        if (err) return res.cc(err);
+        if (results.affectedRows !== 1) return res.cc('删除文章分类失败！');
+        res.cc('删除文章分类成功！', 0);
     });
 };

@@ -9,3 +9,11 @@ exports.add_cate_schema = {
         alias
     }
 };
+
+
+const id = joi.number().integer().min(1).required();
+exports.delete_cate_schema = {
+    params: {
+        id
+    }
+};
