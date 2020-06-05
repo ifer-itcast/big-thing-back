@@ -54,5 +54,10 @@ exports.updatePassword = (req, res) => {
 // 更新用户头像
 exports.updateAvatar = (req, res) => {
     const sql = 'UPDATE ev_users SET user_pic=? WHERE id=?';
-    db.query(sql, [req.body.avatar, req.user.id])
+    // 根据用户 ID 来更新用户头像
+    db.query(sql, [req.body.avatar, req.user.id], (err, results) => {
+        if (err) return res.cc(err);
+        if (results.affectedRows !== 1) return res.cc('更新头像失败！');
+        return res.cc('更新头像成功！', 0);
+    });
 };
