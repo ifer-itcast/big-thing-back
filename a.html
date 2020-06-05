@@ -4,10 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+    ul li:nth-child(1) {
+        color: red;
+        
+    }
+    ul li:nth-child(-n+2) {
+        color: green;
+        font-size: 60px;
+    }
+    </style>
 </head>
 <body>
-    <span>aaa</span>
-    <div style="height: 50px; background-color: red;"></div>
-    <span>aaa</span>
+    <ul>
+        <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    </ul>
 </body>
 </html>

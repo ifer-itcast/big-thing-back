@@ -64,3 +64,33 @@ exports.getArtCateById = (req, res) => {
         });
     });
 };
+
+// 根据 ID 更新文章数据
+exports.updateCateById = (req, res) => {
+    // 查询当前 ID 以外的 name 或 alias 被占用的数据
+    const sql = 'SELECT * FROM ev_article_cate WHERE Id<>? AND (name=? OR alias=?)';
+
+    // 执行查重操作
+    db.query(sql, [req.body.Id, req.body.name, req.body.alias], (err, results) => {
+        // 执行 SQL 语句失败
+        if (err) return res.cc(err);
+
+        // 分类名称 和 分类别名 都被占用
+        if (results.length === 2) return res.cc('分类名称与别名被占用，请更换后重试！');
+        if (results.length === 1 && results[0].name === req.body.name && results[0].alias === req.body.alias) return res.cc('分类名称与别名被占用，请更换后重试！');
+        // 分类名称 或 分类别名 被占用
+        if (results.length === 1 && results[0].name === req.body.name) return res.cc('分类名称被占用，请更换后重试！');
+        if (results.length === 1 && results[0].alias === req.body.alias) return res.cc('分类别名被占用，请更换后重试！');
+
+        // TODO：更新文章分类
+        const sql = `update ev_article_cate set ? where Id=?`;
+        db.query(sql, [req.body, req.body.Id], (err, results) => {
+            // 执行 SQL 语句失败
+            if (err) return res.cc(err);
+            // SQL 语句执行成功，但是影响行数不等于 1
+            if (results.affectedRows !== 1) return res.cc('更新文章分类失败！');
+            // 更新文章分类成功
+            res.cc('更新文章分类成功！', 0);
+        });
+    });
+};
