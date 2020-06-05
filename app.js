@@ -4,6 +4,7 @@ const joi = require('@hapi/joi');
 const expressJWT = require('express-jwt');
 const userRouter = require('./router/user');
 const userinfoRouter = require('./router/userinfo');
+const artCateRouter = require('./router/artcate');
 const config = require('./config');
 const app = express();
 
@@ -29,6 +30,8 @@ app.use(expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api/] })
 // 用户路由模块
 app.use('/api', userRouter);
 app.use('/my', userinfoRouter);
+// 文章分类路由模块
+app.use('/my/article', artCateRouter);
 
 // 错误处理中间件
 app.use((err, req, res, next) => {
